@@ -84,6 +84,56 @@ add_transition_slide <- function(p, p.img, p.title="Slide Title") {
   return(pres)
 }
 
+#' Create Full Text Slide
+#'
+#' This function creates a text slide with a large text box for bullets and a caption.
+#' @param p officer presentation file to add slide
+#' @param p.title Title for slide
+#' @param p.caption Caption text for slide
+#' @param p.text Text for bullets 
+#' @return Full Text slide for PowerPoint Presentation
+#' 
+#' @examples
+#' 
+#' library(officer)
+#' 
+#' psrc_pres = read_pptx(system.file('extdata', 
+#'                                   'psrc-trends-template.pptx', 
+#'                                    package='psrcslides'))
+#' 
+#' psrc_pres <- add_full_text_slide(p=psrc_pres, 
+#'                                  p.title="Presentation Outline",
+#'                                  p.caption="Topics covered today include:",
+#'                                  p.text=paste0("Population Trends\n",
+#'                                                "Housing Trends\n",
+#'                                                "Job Trends\n",
+#'                                                "Transportation Trends"))
+#'                                   
+#' @export
+#'
+add_full_text_slide <- function(p, p.title="Slide Title", p.caption="Caption Text", p.text="Bullet Points") {
+  
+  # Create a new slide
+  pres <- officer::add_slide(p, layout = "Title with Full Text and Caption") 
+  
+  # Add Slide Title
+  pres <- officer::ph_with(x=pres, 
+                           value=p.title, 
+                           location = officer::ph_location_type(type = "title"))
+  
+  # Add Slide Caption above main Text
+  pres <- officer::ph_with(x=pres, 
+                           value=p.caption, 
+                           location = officer::ph_location_label(ph_label = "Text Placeholder 3"))
+  
+  # Add Slide Bullet Text
+  pres <- officer::ph_with(x=pres, 
+                           value=p.text, 
+                           location = officer::ph_location_label(ph_label = "Text Placeholder 5"))
+  
+  return(pres)
+}
+
 #' Create Slide with Full width picture or image and a caption
 #'
 #' This function creates a data slide with a full width object and a caption text.
@@ -142,6 +192,48 @@ add_full_chart_slide <- function(p, p.title="Slide Title", p.caption=" ", p.char
   pres <- officer::ph_with(x=pres, 
                            value=p.caption, 
                            location = officer::ph_location_type(type = "body"))
+  
+  # Add Chart
+  pres <- officer::ph_with(x=pres, 
+                           value=p.chart, 
+                           location = officer::ph_location_type(type = "pic"))
+  
+  return(pres)
+}
+
+#' Create Slide with Full Bullets on left and chart on the left
+#'
+#' This function creates a data slide with a bullets and a chart.
+#' @param p officer presentation object
+#' @param p.title Title for slide
+#' @param p.bullet Text for bullet points
+#' @param p.caption Text to be used for summary above the chart
+#' @param p.chart Chart object to display in slide
+#' 
+#' @return Full Data slide with caption for PowerPoint presentation
+#' 
+#'                                   
+#' @export
+#'
+add_bullet_plus_chart_slide <- function(p, p.title=" ", p.caption=" ", p.bullet=" ", p.chart) {
+  
+  # Create a new slide
+  pres <- officer::add_slide(p, layout = "Title with Bullets, Chart and Caption") 
+  
+  # Add Slide Title
+  pres <- officer::ph_with(x=pres,
+                           value=p.title, 
+                           location = officer::ph_location_type(type = "title"))
+  
+  # Add Slide Caption above main chart
+  pres <- officer::ph_with(x=pres, 
+                           value=p.caption, 
+                           location = officer::ph_location_label(ph_label = "Text Placeholder 4"))
+  
+  # Add Bullet
+  pres <- officer::ph_with(x=pres, 
+                           value=p.bullet,
+                           location = officer::ph_location_label(ph_label = "Text Placeholder 5"))
   
   # Add Chart
   pres <- officer::ph_with(x=pres, 
