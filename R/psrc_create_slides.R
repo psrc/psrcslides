@@ -10,19 +10,22 @@
 #' 
 #' @examples
 #' 
-#' psrc_pres <- add_cover_slide(p.title="Puget Sound Trends",
+#' psrc_pres = officer::read_pptx(system.file('extdata', 
+#'                                            'psrc-trends-template.pptx', 
+#'                                             package='psrcslides'))
+#' 
+#' psrc_pres <- add_cover_slide(p=psrc_pres,
+#'                              p.title="Puget Sound Trends",
 #'                              p.mtg="Growth Management Policy Board",
 #'                              p.date="September 2022")
 #' 
 #' @export
 #'
-add_cover_slide <- function(p=officer::read_pptx(system.file('extdata', 'psrc-trends-template.pptx', package='psrcslides')),
+add_cover_slide <- function(p,
                             p.img=system.file('extdata', 'bellevuelakewashington.jpg', package='psrcslides'),
                             p.title="Presentation Title",
                             p.mtg="Meeting Name",
                             p.date="Meeting Date") {
-  
-  psrcplot::install_psrc_fonts()
   
   pres <- officer::add_slide(p, layout = "Title Slide") 
   pres <- officer::ph_with(x=pres,
@@ -40,3 +43,110 @@ add_cover_slide <- function(p=officer::read_pptx(system.file('extdata', 'psrc-tr
   return(pres)
 }
 
+#' Create Transition Slide
+#'
+#' This function creates a transition slide with a background picture and white centered text.
+#' @param p officer presentation file to add slide
+#' @param p.img Location or URL for background image - ex "images/bellevuelakewashington_3.jpg"
+#' @param p.title Title for slide
+#' @return Transition slide for PowerPoint Presentation
+#' 
+#' @examples
+#' 
+#' library(officer)
+#' 
+#' psrc_pres = read_pptx(system.file('extdata', 
+#'                                   'psrc-trends-template.pptx', 
+#'                                    package='psrcslides'))
+#' 
+#' psrc_pres <- add_transition_slide(p=psrc_pres, 
+#'                                   p.title="Population Trends",
+#'                                   p.img=system.file('extdata', 
+#'                                                     'uw-equity.png',
+#'                                                      package='psrcslides'))
+#'                                   
+#' @export
+#'
+add_transition_slide <- function(p, p.img, p.title="Slide Title") {
+  
+  # Create a new slide
+  pres <- officer::add_slide(p, layout = "Transition Slide") 
+  
+  # Add background image to slide
+  pres <- officer::ph_with(x=pres, 
+                           value=officer::external_img(file.path(p.img)),
+                           location = officer::ph_location_type(type = "pic"))
+  
+  # Add Slide Title
+  pres <- officer::ph_with(x=pres, 
+                           value=p.title, 
+                           location = officer::ph_location_type(type = "title"))
+  return(pres)
+}
+
+#' Create Slide with Full width picture or image and a caption
+#'
+#' This function creates a data slide with a full width object and a caption text.
+#' @param p officer presentation object
+#' @param p.title Title for slide
+#' @param p.caption Text to be used for summary above the chart
+#' @param p.chart Chart object to display in slide
+#' 
+#' @return Full Data slide with caption for PowerPoint presentation
+#' 
+#' @examples
+#' 
+#' library(dplyr)
+#' library(officer)
+#' library(psrctrends)
+#' library(psrcplot)
+#' 
+#' psrc_pres = read_pptx(system.file('extdata', 
+#'                                   'psrc-trends-template.pptx', 
+#'                                    package='psrcslides'))
+#'                                             
+#' ofm.pop <- get_ofm_intercensal_population() %>% 
+#'     filter(Jurisdiction=="Region") %>%
+#'     mutate(Delta = round(Estimate - lag(Estimate),-2)) %>%
+#'     filter(Year >=2013) %>%
+#'     mutate(Year = as.character(Year))
+#'     
+#' pop.change <- create_bar_chart(t=ofm.pop, 
+#'                                w.x="Year", 
+#'                                w.y="Delta", 
+#'                                f="Variable", 
+#'                                w.color="GnPr",
+#'                                w.title="Population Change: 2013 to 2022",
+#'                                w.sub.title="Source: OFM",
+#'                                est.type = "number")
+#' 
+#' psrc_pres <- add_full_chart_slide(p = psrc_pres, 
+#'                                   p.title = "Despite a Global Pandemic, 
+#'                                              the region continues to grow",
+#'                                   p.caption = "Enter your caption text here",
+#'                                   p.chart = pop.change)
+#'                                   
+#' @export
+#'
+add_full_chart_slide <- function(p, p.title="Slide Title", p.caption=" ", p.chart) {
+  
+  # Create a new slide
+  pres <- officer::add_slide(p, layout = "Title with Full Chart and Caption") 
+  
+  # Add Slide Title
+  pres <- officer::ph_with(x=pres,
+                           value=p.title, 
+                           location = officer::ph_location_type(type = "title"))
+  
+  # Add Slide Caption above main chart
+  pres <- officer::ph_with(x=pres, 
+                           value=p.caption, 
+                           location = officer::ph_location_type(type = "body"))
+  
+  # Add Chart
+  pres <- officer::ph_with(x=pres, 
+                           value=p.chart, 
+                           location = officer::ph_location_type(type = "pic"))
+  
+  return(pres)
+}

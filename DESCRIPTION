@@ -11,7 +11,10 @@ Description: Various functions to create PowerPoint slides for the Central Puget
 License: GPL-3 + file LICENSE
 Encoding: UTF-8
 LazyData: true
-Imports:
-    officer,
+Suggests:
+    dplyr,
+    psrctrends,
     psrcplot
+Imports:
+    officer
 RoxygenNote: 7.2.0

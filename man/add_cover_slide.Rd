@@ -5,8 +5,7 @@
 \title{Create Cover Slide}
 \usage{
 add_cover_slide(
-  p = officer::read_pptx(system.file("extdata", "psrc-trends-template.pptx", package =
-    "psrcslides")),
+  p,
   p.img = system.file("extdata", "bellevuelakewashington.jpg", package = "psrcslides"),
   p.title = "Presentation Title",
   p.mtg = "Meeting Name",
@@ -32,7 +31,12 @@ This function allows you to create a title slide for a new presentation.
 }
 \examples{
 
-psrc_pres <- add_cover_slide(p.title="Puget Sound Trends",
+psrc_pres = officer::read_pptx(system.file('extdata', 
+                                           'psrc-trends-template.pptx', 
+                                            package='psrcslides'))
+
+psrc_pres <- add_cover_slide(p=psrc_pres,
+                             p.title="Puget Sound Trends",
                              p.mtg="Growth Management Policy Board",
                              p.date="September 2022")
 
