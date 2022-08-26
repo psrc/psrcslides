@@ -2,16 +2,14 @@
 % Please edit documentation in R/psrc_create_slides.R
 \name{add_full_chart_slide}
 \alias{add_full_chart_slide}
-\title{Create Slide with Full width picture or image and a caption}
+\title{Create Slide with Full width picture or image}
 \usage{
-add_full_chart_slide(p, p.title = "Slide Title", p.caption = " ", p.chart)
+add_full_chart_slide(p, p.title = "Slide Title", p.chart)
 }
 \arguments{
 \item{p}{officer presentation object}
 
 \item{p.title}{Title for slide}
-
-\item{p.caption}{Text to be used for summary above the chart}
 
 \item{p.chart}{Chart object to display in slide}
 }
@@ -19,38 +17,5 @@ add_full_chart_slide(p, p.title = "Slide Title", p.caption = " ", p.chart)
 Full Data slide with caption for PowerPoint presentation
 }
 \description{
-This function creates a data slide with a full width object and a caption text.
-}
-\examples{
-
-library(dplyr)
-library(officer)
-library(psrctrends)
-library(psrcplot)
-
-psrc_pres = read_pptx(system.file('extdata', 
-                                  'psrc-trends-template.pptx', 
-                                   package='psrcslides'))
-                                            
-ofm.pop <- get_ofm_intercensal_population() \%>\% 
-    filter(Jurisdiction=="Region") \%>\%
-    mutate(Delta = round(Estimate - lag(Estimate),-2)) \%>\%
-    filter(Year >=2013) \%>\%
-    mutate(Year = as.character(Year))
-    
-pop.change <- create_bar_chart(t=ofm.pop, 
-                               w.x="Year", 
-                               w.y="Delta", 
-                               f="Variable", 
-                               w.color="GnPr",
-                               w.title="Population Change: 2013 to 2022",
-                               w.sub.title="Source: OFM",
-                               est.type = "number")
-
-psrc_pres <- add_full_chart_slide(p = psrc_pres, 
-                                  p.title = "Despite a Global Pandemic, 
-                                             the region continues to grow",
-                                  p.caption = "Enter your caption text here",
-                                  p.chart = pop.change)
-                                  
+This function creates a data slide with a full width object without caption text.
 }

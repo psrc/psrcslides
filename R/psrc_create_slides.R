@@ -170,15 +170,15 @@ add_full_text_slide <- function(p, p.title="Slide Title", p.caption="Caption Tex
 #'                                w.sub.title="Source: OFM",
 #'                                est.type = "number")
 #' 
-#' psrc_pres <- add_full_chart_slide(p = psrc_pres, 
-#'                                   p.title = "Despite a Global Pandemic, 
+#' psrc_pres <- add_full_chart_caption_slide(p = psrc_pres, 
+#'                                           p.title = "Despite a Global Pandemic, 
 #'                                              the region continues to grow",
-#'                                   p.caption = "Enter your caption text here",
-#'                                   p.chart = pop.change)
+#'                                           p.caption = "Enter your caption text here",
+#'                                           p.chart = pop.change)
 #'                                   
 #' @export
 #'
-add_full_chart_slide <- function(p, p.title="Slide Title", p.caption=" ", p.chart) {
+add_full_chart_caption_slide <- function(p, p.title="Slide Title", p.caption=" ", p.chart) {
   
   # Create a new slide
   pres <- officer::add_slide(p, layout = "Title with Full Chart and Caption") 
@@ -193,6 +193,34 @@ add_full_chart_slide <- function(p, p.title="Slide Title", p.caption=" ", p.char
                            value=p.caption, 
                            location = officer::ph_location_type(type = "body"))
   
+  # Add Chart
+  pres <- officer::ph_with(x=pres, 
+                           value=p.chart, 
+                           location = officer::ph_location_type(type = "pic"))
+  
+  return(pres)
+}
+
+#' Create Slide with Full width picture or image
+#'
+#' This function creates a data slide with a full width object without caption text.
+#' @param p officer presentation object
+#' @param p.title Title for slide
+#' @param p.chart Chart object to display in slide
+#' 
+#' @return Full Data slide with caption for PowerPoint presentation
+#' 
+#' @export
+#'
+add_full_chart_slide <- function(p, p.title="Slide Title", p.chart) {
+  
+  # Create a new slide
+  pres <- officer::add_slide(p, layout = "Title with Full Chart") 
+  
+  # Add Slide Title
+  pres <- officer::ph_with(x=pres,
+                           value=p.title, 
+                           location = officer::ph_location_type(type = "title"))
   # Add Chart
   pres <- officer::ph_with(x=pres, 
                            value=p.chart, 
